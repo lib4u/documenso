@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import { Trans } from '@lingui/react/macro';
 import type { Field } from '@prisma/client';
 import { FieldType, RecipientRole } from '@prisma/client';
-import { LucideChevronDown, LucideChevronUp } from 'lucide-react';
+import { LucideChevronDown, LucideChevronUp, DownloadCloudIcon } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { P, match } from 'ts-pattern';
 
@@ -50,6 +50,7 @@ import { DocumentSigningTextField } from '~/components/general/document-signing/
 import { useRequiredDocumentSigningAuthContext } from './document-signing-auth-provider';
 import { DocumentSigningCompleteDialog } from './document-signing-complete-dialog';
 import { DocumentSigningRecipientProvider } from './document-signing-recipient-provider';
+import { EnvelopeDownloadDialog } from '~/components/dialogs/envelope-download-dialog';
 
 export type DocumentSigningPageViewV1Props = {
   recipient: RecipientWithFields;
@@ -233,11 +234,22 @@ export const DocumentSigningPageViewV1 = ({
           </div>
 
           <div className="flex items-center gap-x-4">
+            <EnvelopeDownloadDialog
+                            envelopeId={document.envelopeId}
+                            envelopeStatus={document.status}
+                            token={recipient.token}
+                            trigger={
+                              <Button variant="ghost" size="sm" className="w-full justify-start">
+                                <DownloadCloudIcon className="mr-2 h-4 w-4" />
+                                <Trans>Download PDF</Trans>
+                              </Button>
+                            }
+                          />
             <DocumentSigningAttachmentsPopover
               envelopeId={document.envelopeId}
               token={recipient.token}
             />
-            <DocumentSigningRejectDialog documentId={document.id} token={recipient.token} />
+       
           </div>
         </div>
 
